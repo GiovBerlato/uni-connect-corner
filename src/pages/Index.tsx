@@ -2,7 +2,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NewsCard from "@/components/NewsCard";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
+import { useState } from "react";
 import heroImage from "@/assets/hero-image.jpg";
 import newsSports from "@/assets/news-sports.jpg";
 import newsTech from "@/assets/news-tech.jpg";
@@ -11,6 +12,8 @@ import newsCulture from "@/assets/news-culture.jpg";
 import newsEntertainment from "@/assets/news-entertainment.jpg";
 
 const Index = () => {
+  const [visibleNews, setVisibleNews] = useState(6);
+
   const featuredNews = [
     {
       id: 1,
@@ -123,10 +126,24 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredNews.map((news) => (
+              {featuredNews.slice(0, visibleNews).map((news) => (
                 <NewsCard key={news.id} {...news} />
               ))}
             </div>
+
+            {visibleNews < featuredNews.length && (
+              <div className="flex justify-center pt-8">
+                <Button
+                  onClick={() => setVisibleNews(visibleNews + 3)}
+                  variant="outline"
+                  size="lg"
+                  className="gap-2"
+                >
+                  <Zap className="h-4 w-4" />
+                  Carregar Mais Notícias
+                </Button>
+              </div>
+            )}
           </div>
         </section>
 
@@ -143,18 +160,19 @@ const Index = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {[
-                  { name: "Esportes", color: "sports" as const, href: "#esportes" },
-                  { name: "Tecnologia", color: "tech" as const, href: "#tecnologia" },
-                  { name: "Bem-estar", color: "wellness" as const, href: "#bem-estar" },
-                  { name: "Cultura", color: "culture" as const, href: "#cultura" },
-                  { name: "Entretenimento", color: "entertainment" as const, href: "#entretenimento" },
+                  { name: "Esportes", emoji: "⚽", color: "sports" as const, href: "#esportes" },
+                  { name: "Tecnologia", emoji: "💻", color: "tech" as const, href: "#tecnologia" },
+                  { name: "Bem-estar", emoji: "🧘", color: "wellness" as const, href: "#bem-estar" },
+                  { name: "Cultura", emoji: "🎭", color: "culture" as const, href: "#cultura" },
+                  { name: "Entretenimento", emoji: "🎬", color: "entertainment" as const, href: "#entretenimento" },
                 ].map((category) => (
                   <a
                     key={category.name}
                     href={category.href}
                     className="group"
                   >
-                    <div className="bg-card border border-border rounded-lg p-6 text-center hover:shadow-lg transition-all duration-300">
+                    <div className="bg-card border border-border rounded-lg p-6 text-center hover:shadow-lg hover:border-primary transition-all duration-300 space-y-3">
+                      <div className="text-4xl">{category.emoji}</div>
                       <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
                         {category.name}
                       </h3>
